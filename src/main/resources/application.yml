@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: Credit Limit Tracker
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+
+prn:
+  fixedStartingPositions: 16,38,47,61,74,82
