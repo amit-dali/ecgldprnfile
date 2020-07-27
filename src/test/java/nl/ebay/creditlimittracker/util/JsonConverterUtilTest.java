@@ -20,7 +20,7 @@ public class JsonConverterUtilTest implements WithBDDMockito {
         String json = JsonConverterUtil.convertToJson(user);
 
         // then
-        assertEquals("{\"name\":\"R.J.\",\"address\":\"Amsterdam\"}", json);
+        assertEquals("{\"name\":\"R.J.\",\"address\":\"Amsterdam\",\"postCode\":null,\"phone\":null,\"creditLimit\":0.0,\"dateOfBirth\":null,\"backendSystem\":null}", json);
     }
 
     @Test

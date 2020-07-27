@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(SpringExtension.class)
@@ -37,5 +38,19 @@ public class HomeControllerMvCTest implements WithBDDMockito {
         // then
         assertEquals(200, response.getStatus());
         assertNotNull(response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("SHOULD return Not found")
+    void getHomePage_invalid_url() throws Exception {
+        // given
+
+        // when
+        MockHttpServletResponse response = mockMvc
+                .perform(get("/home"))
+                .andReturn()
+                .getResponse();
+        // then
+        assertEquals(404, response.getStatus());
     }
 }

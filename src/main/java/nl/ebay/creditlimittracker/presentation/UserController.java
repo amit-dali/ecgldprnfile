@@ -6,9 +6,11 @@ import nl.ebay.creditlimittracker.service.SortByName;
 import nl.ebay.creditlimittracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,20 +19,33 @@ import java.util.List;
 public class UserController {
 
     private final UserService userServiceCSV;
-    private final UserService userServicePrn;
+    private final UserService userServicePRN;
 
     @Autowired
     public UserController(@Qualifier(value = "userServiceCSVImpl") UserService userServiceCSV,
-                          @Qualifier(value = "userServicePRNImpl") UserService userServicePrn) {
+                          @Qualifier(value = "userServicePRNImpl") UserService userServicePRN) {
         this.userServiceCSV = userServiceCSV;
-        this.userServicePrn = userServicePrn;
+        this.userServicePRN = userServicePRN;
     }
 
     @GetMapping("/users")
     public List<User> getUsers() {
-        List<User> users = userServicePrn.getUserData();
-        users.addAll(userServiceCSV.getUserData());
-        Collections.sort(users, new SortByName());
-        return users;
+        List<User> usersInCSV = userServiceCSV.getUserData();
+        List<User> usersInPrn = userServicePRN.getUserData();
+        return appendAndSortUsers(usersInCSV, usersInPrn);
+    }
+
+    private List<User> appendAndSortUsers(List<User> usersInCSV, List<User> usersInPRN) {
+        if (CollectionUtils.isEmpty(usersInCSV)) {
+            return usersInPRN;
+        }
+        if (CollectionUtils.isEmpty(usersInPRN)) {
+            return usersInCSV;
+        }
+        List<User> allUsersFromAllSources = new ArrayList<>();
+        allUsersFromAllSources.addAll(usersInCSV);
+        allUsersFromAllSources.addAll(usersInPRN);
+        Collections.sort(allUsersFromAllSources, new SortByName());
+        return allUsersFromAllSources;
     }
 }
