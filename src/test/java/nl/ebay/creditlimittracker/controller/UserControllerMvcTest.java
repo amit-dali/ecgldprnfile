@@ -4,12 +4,12 @@ import nl.ebay.creditlimittracker.CreditLimitTrackerApplication;
 import nl.ebay.creditlimittracker.model.User;
 import nl.ebay.creditlimittracker.presentation.UserController;
 import nl.ebay.creditlimittracker.service.UserService;
+import nl.ebay.creditlimittracker.util.JsonConverterUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -18,7 +18,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -33,17 +35,23 @@ public class UserControllerMvcTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private UserService userService;
-    @Captor
-    private ArgumentCaptor<User> storeArgumentCaptor;
+    @Qualifier("userServiceCSVImpl")
+    private UserService userServiceCSV;
+
+    @MockBean
+    @Qualifier("userServicePRNImpl")
+    private UserService userServicePRN;
 
     @Test
     @DisplayName("SHOULD return list of users json")
     void getUsers_200() throws Exception {
         // given
 
-        User user = User.builder().name("Name").address("adddress").creditLimit(1222).dateOfBirth("20/10/1990").build();
-        given(userService.getUserData()).willReturn(Collections.singletonList(user));
+        User user1 = User.builder().name("Name").address("adddress").creditLimit(1222).dateOfBirth("20/10/1990").build();
+        User user2 = User.builder().name("PrnName").address("Prn adddress").creditLimit(12.22).dateOfBirth("19891990").build();
+
+        given(userServiceCSV.getUserData()).willReturn(Collections.singletonList(user1));
+        given(userServicePRN.getUserData()).willReturn(Collections.singletonList(user2));
         // when
         MockHttpServletResponse response = mockMvc
                 .perform(get("/users")
@@ -52,8 +60,10 @@ public class UserControllerMvcTest {
                 .getResponse();
         // then
         assertEquals(200, response.getStatus());
-        assertEquals("{\"_embedded\":{\"storeList\":[{\"uuid\":\"uuid\",\"city\":\"city\",\"postalCode\":\"postalCode\",\"street\":\"street\",\"street2\":\"street2\",\"street3\":\"street3\",\"addressName\":\"addressName\",\"longitude\":5.0,\"latitude\":52.0,\"complexNumber\":\"complexNumber\",\"showWarningMessage\":true,\"todayOpen\":\"todayOpen\",\"locationType\":\"Supermarkt\",\"collectionPoint\":true,\"sapStoreID\":\"sapStoreID\",\"todayClose\":\"todayClose\",\"distance\":0.0,\"_links\":{\"stores\":{\"href\":\"http://localhost/stores/uuid\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/stores?longitude=52.3&latitude=5.2\"}}}", response.getContentAsString());
-        verify(userService).getUserData();
-        verifyNoMoreInteractions(userService);
+        List<User> users = Arrays.asList(user1, user2);
+
+        assertEquals(JsonConverterUtil.convertToJson(users), response.getContentAsString());
+        verify(userServiceCSV).getUserData();
+        verifyNoMoreInteractions(userServiceCSV);
     }
 }

@@ -12,21 +12,21 @@ strong {
 p {
     font-family: sans-serif;
 }
-storeTable {
+userTable {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
-#storeTable td, #storeTable th {
+#userTable td, #userTable th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#storeTable tr:nth-child(even){background-color: #f2f2f2;}
+#userTable tr:nth-child(even){background-color: #f2f2f2;}
 
-#storeTable tr:hover {background-color: #ddd;}
+#userTable tr:hover {background-color: #ddd;}
 
-#storeTable th {
+#userTable th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;

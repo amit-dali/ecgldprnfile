@@ -22,12 +22,12 @@ import java.util.List;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 @Service
-public class UserServicePrnImpl implements UserService {
+public class UserServicePRNImpl implements UserService {
 
     private final int[] fixedStartingPositions;
 
     @Autowired
-    public UserServicePrnImpl(@Value("${prn.fixedStartingPositions}") String fixedStartingPositions) {
+    public UserServicePRNImpl(@Value("${prn.fixedStartingPositions}") String fixedStartingPositions) {
         this.fixedStartingPositions = Arrays.stream(fixedStartingPositions.split(",")).mapToInt(Integer::parseInt).toArray();
     }
 

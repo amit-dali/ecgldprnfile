@@ -20,12 +20,11 @@ function getUsers() {
 
     client.get(getStoresURL, function (response) {
         let responseJSON = JSON.parse(response);
-        let stores = responseJSON;//._embedded.storeList;
-        let tableRef = document.getElementById('storeTable').getElementsByTagName('tbody')[0];
+        let tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
         tableRef.innerHTML = '';
-        for (let i = 0; i < stores.length; i++) {
+        for (let i = 0; i < responseJSON.length; i++) {
             let newRow = tableRef.insertRow();
-            let currentUser = stores[i];
+            let currentUser = responseJSON[i];
 
             addCell(newRow, 0, currentUser.name);
             addCell(newRow, 1, currentUser.address);

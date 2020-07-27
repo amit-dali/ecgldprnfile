@@ -20,9 +20,9 @@ public class UserController {
     private final UserService userServicePrn;
 
     @Autowired
-    public UserController(@Qualifier(value = "userServiceCSVImpl") UserService userService,
-                          @Qualifier(value = "userServicePrnImpl") UserService userServicePrn) {
-        this.userServiceCSV = userService;
+    public UserController(@Qualifier(value = "userServiceCSVImpl") UserService userServiceCSV,
+                          @Qualifier(value = "userServicePRNImpl") UserService userServicePrn) {
+        this.userServiceCSV = userServiceCSV;
         this.userServicePrn = userServicePrn;
     }
 
