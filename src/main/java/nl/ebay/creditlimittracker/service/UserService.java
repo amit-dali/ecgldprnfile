@@ -11,4 +11,12 @@ public interface UserService {
      * @return list of users
      */
     List<User> getUserData();
+
+    /**
+     * Service fetches user information from a file based on name
+     *
+     * @param name name of the user
+     * @return list of credit limits of an user
+     */
+    List<User> getUserDataByName(String name);
 }

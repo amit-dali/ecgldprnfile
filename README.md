@@ -1,3 +1,27 @@
+# Getting Started
+
+### Prerequisites to run the application on your machine
+* Java 11 and Maven
+###  Run application 
+* mvn spring-boot:run
+     <br /> (or) 
+* Run StoremanagerApplication class as java application from IDE
+     <br /> (or) 
+* docker build using Dockerfile 
+   NOTE : Make sure "mvn package" step is executed before docker build  
+   docker build --quiet --build-arg ENVIRONMENT=local  --tag creditlimittracker:1.0.0 .
+   docker run -d -p 8080:8080 creditlimittracker:1.0.0
+ 
+### Using the application
+* Open http://localhost:8080/ to see home page with the retrieved users from files sorted by Name  <br />
+* The Latitude & Longitude input values are populated by current geo location when you allow the browser to access your computer geo location  <br />
+* Click on Submit button to see five near by Jumbo stores based on Latitude and Longitude  <br />
+ 
+ Application has all the crud API's to manage Stores  
+
+### API Swagger documentation 
+ * Link to API documentation (http://localhost:8080/swagger-ui/index.html#/)
+
 ## Why?
 
 We are interested in your skills as a developer. As part of our assessment, we want to see your code.

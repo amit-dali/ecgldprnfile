@@ -21,13 +21,22 @@ import java.util.List;
 public class UserServiceCSVImpl implements UserService {
     @Override
     public List<User> getUserData() {
+        return fetchData();
+    }
+
+    @Override
+    public List<User> getUserDataByName(String name) {
+        return fetchData(name);
+    }
+
+    private List<User> fetchData(String name) {
         List<User> usersFromCSV = new ArrayList<>();
         try {
             File file = FileUtil.getFileFromClasspath("/Workbook2.csv");
             CSVReader reader = new CSVReader(new FileReader(file));
             String[] line;
             while ((line = reader.readNext()) != null) {
-                if (!line[0].equals("Name")) {
+                if ((!line[0].equals("Name")) && (name == null || line[0].equals(name))) {
                     usersFromCSV.add(User.builder()
                             .name(line[0])
                             .address(line[1])
@@ -43,5 +52,9 @@ public class UserServiceCSVImpl implements UserService {
             throw new FileParsingException("Exception while reading", e);
         }
         return usersFromCSV;
+    }
+
+    private List<User> fetchData() {
+        return fetchData(null);
     }
 }

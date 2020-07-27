@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Credit Limit Tracker
+    name: CreditLimitTracker
   thymeleaf:
     cache: false
     enabled: true

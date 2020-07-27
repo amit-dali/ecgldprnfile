@@ -34,6 +34,15 @@ public class UserServicePRNImpl implements UserService {
 
     @Override
     public List<User> getUserData() {
+        return fetchData();
+    }
+
+    @Override
+    public List<User> getUserDataByName(String name) {
+        return fetchData(name);
+    }
+
+    private List<User> fetchData(String name) {
         List<User> usersFromPrn = new ArrayList<>();
         try {
             File file = FileUtil.getFileFromClasspath("/Workbook2.prn");
@@ -41,7 +50,7 @@ public class UserServicePRNImpl implements UserService {
             BufferedReader br = new BufferedReader(new FileReader(file, ISO_8859_1));
             int iteration = 0;
             while ((line = br.readLine()) != null) {
-                if (iteration != 0) {
+                if (iteration != 0 && (name == null || getData(line, 0).equals(name))) {
                     usersFromPrn.add(User.builder()
                             .name(getData(line, 0))
                             .address(getData(line, 1))
@@ -61,6 +70,10 @@ public class UserServicePRNImpl implements UserService {
         }
 
         return usersFromPrn;
+    }
+
+    private List<User> fetchData() {
+        return fetchData(null);
     }
 
     private String getData(String line, int position) {
