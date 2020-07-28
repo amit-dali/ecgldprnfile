@@ -9,15 +9,14 @@
      <br /> (or) 
 * docker build using Dockerfile 
    NOTE : Make sure "mvn package" step is executed before docker build  
+   <br />
    docker build --quiet --build-arg ENVIRONMENT=local  --tag creditlimittracker:1.0.0 .
+   <br />
    docker run -d -p 8080:8080 creditlimittracker:1.0.0
  
 ### Using the application
 * Open http://localhost:8080/ to see home page with the retrieved users from files sorted by Name  <br />
-* The Latitude & Longitude input values are populated by current geo location when you allow the browser to access your computer geo location  <br />
-* Click on Submit button to see five near by Jumbo stores based on Latitude and Longitude  <br />
- 
- Application has all the crud API's to manage Stores  
+* Application has api to retrieve credit limit details based on user name (exact match from files )
 
 ### API Swagger documentation 
  * Link to API documentation (http://localhost:8080/swagger-ui/index.html#/)

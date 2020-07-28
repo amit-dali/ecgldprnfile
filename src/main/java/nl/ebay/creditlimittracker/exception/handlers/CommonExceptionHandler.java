@@ -1,7 +1,6 @@
 package nl.ebay.creditlimittracker.exception.handlers;
 
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.IOException;
-import java.text.ParseException;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,18 +43,30 @@ public class CommonExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Customize the response for {@link IOException}
+     * Customize the response for {@link FileParsingException}
      *
      * @param ex      the exception
      * @param request the current request
      * @return a {@code ResponseEntity} instance
      */
-    @ExceptionHandler({IOException.class, CsvValidationException.class, ParseException.class})
+    @ExceptionHandler({FileParsingException.class})
     private ResponseEntity<Object> handleFileParsingOrReadingExc(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, "The execution of the service failed while reading the file.Please try again",
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
+    /**
+     * Customize the response for {@link ConstraintViolationException}
+     *
+     * @param ex      the exception
+     * @param request the current request
+     * @return a {@code ResponseEntity} instance
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    private ResponseEntity<Object> handleValidations(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, "The Request is missing required fields",
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
